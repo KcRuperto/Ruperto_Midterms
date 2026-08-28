@@ -15,7 +15,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-violet-100 to-purple-200">
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-20">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-violet-800">Playlist Manager</h1>
