@@ -9,34 +9,43 @@ export default function TrackDetail({ track }) {
 
   if (!activeTrack) {
     return (
-      <div className="rounded-xl border border-violet-100 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
-        <p className="text-sm text-slate-500">
-          Select a row to view its details.
-        </p>
+      <div className="rounded-md border border-gray-200 bg-white p-5">
+        <p className="text-sm text-gray-500">Select a track to see what's playing.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-violet-100 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-violet-800">
-          {activeTrack.title}
-        </h2>
-        <span className="rounded-full bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white">
-          {activeTrack.role}
+    <div className="rounded-md border border-gray-200 bg-white p-5">
+      <p className="text-xs font-semibold uppercase tracking-wide text-purple-600 mb-3">Now Playing</p>
+
+      <div className="flex items-center gap-3.5">
+        <div className="w-14 h-14 flex items-center justify-center rounded-md bg-purple-600 text-2xl text-white">
+          ♪
+        </div>
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold text-gray-800 truncate">{activeTrack.title}</h2>
+          <p className="text-sm text-gray-500 truncate">{activeTrack.artist}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-[auto_1fr] gap-x-3.5 gap-y-1.5 text-sm mt-4">
+        <span className="text-gray-500">Genre</span>
+        <span className="font-medium text-gray-800">{activeTrack.genre}</span>
+
+        <span className="text-gray-500">BPM</span>
+        <span className="font-mono font-medium text-gray-800">{activeTrack.bpm}</span>
+
+        <span className="text-gray-500">Label</span>
+        <span className="font-medium text-gray-800">{activeTrack.label}</span>
+
+        <span className="text-gray-500">Role</span>
+        <span>
+          <span className="rounded-full bg-blue-600 px-2.5 py-0.5 text-xs font-semibold text-white">
+            {activeTrack.role}
+          </span>
         </span>
       </div>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-3.5 gap-y-1.5 text-sm">
-        <dt className="text-slate-500">Genre</dt>
-        <dd className="font-medium">{activeTrack.genre}</dd>
-        <dt className="text-slate-500">Artist</dt>
-        <dd className="font-medium">{activeTrack.artist}</dd>
-        <dt className="text-slate-500">BPM</dt>
-        <dd className="font-medium">{activeTrack.bpm}</dd>
-        <dt className="text-slate-500">Label</dt>
-        <dd className="font-medium">{activeTrack.label}</dd>
-      </dl>
     </div>
   );
 }

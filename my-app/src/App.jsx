@@ -10,18 +10,20 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
 
   function handleAddTrack(track) {
-    const newTrack = { id: nextId++, ...track };
-    setTracks((prev) => [...prev, newTrack]);
+    setTracks([...tracks, { id: nextId++, ...track }]);
   }
 
+  const selected = tracks.find((t) => t.id === selectedId) || null;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-violet-100 to-purple-200">
-      <header className="sticky top-0 z-10 border-b border-violet-200 bg-white/80 px-6 py-3 backdrop-blur-sm">
+    <div className="min-h-screen bg-purple-100">
+      <header className="border-b border-gray-200 bg-white px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-700 to-blue-600 bg-clip-text text-transparent">Track & Spin</h1>
-          <p className="text-xs text-slate-500">
-            Register tracks and manage your library
-          </p>
+          <h1 className="text-xl font-bold flex items-center gap-1">
+            <span>Track</span>
+            <span className="text-purple-700">& Spin</span>
+          </h1>
+          <p className="text-xs text-gray-500">Register tracks and manage your library</p>
         </div>
       </header>
 
@@ -32,17 +34,11 @@ export default function App() {
           </section>
 
           <section className="min-w-0">
-            <Track
-              tracks={tracks}
-              selectedId={selectedId}
-              onSelectRow={setSelectedId}
-            />
+            <Track tracks={tracks} selectedId={selectedId} onSelectRow={setSelectedId} />
           </section>
 
           <aside className="min-w-0">
-            <TrackDetail
-              track={tracks.find((t) => t.id === selectedId) ?? null}
-            />
+            <TrackDetail track={selected} />
           </aside>
         </main>
       </div>

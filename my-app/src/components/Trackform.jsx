@@ -1,181 +1,138 @@
 import { useState } from "react";
 
-const GENRES = ["Pop", "Rock", "Indie", "Jazz"];
-const EMPTY_FORM = {
-  title: "",
-  genre: "",
-  artist: "",
-  bpm: "",
-  label: "",
-  role: "",
-};
-
-const inputClass =
-  "w-full rounded-lg border border-violet-100 px-3 py-2 text-sm outline-none focus:border-blue-500";
-const labelClass = "text-sm text-slate-500";
-const errorClass = "text-xs text-rose-600";
+const genres = ["Pop", "Rock", "Indie", "Jazz"];
 
 export default function TrackForm({ onAdd }) {
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [title, setTitle] = useState("");
+  const [genre, setGenre] = useState("");
+  const [artist, setArtist] = useState("");
+  const [bpm, setBpm] = useState("");
+  const [label, setLabel] = useState("");
+  const [role, setRole] = useState("");
   const [errors, setErrors] = useState({});
 
-  function updateField(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  function checkErrors() {
+    let err = {};
+
+    if (title.trim().length < 5) err.title = "Title needs at least 5 characters";
+    if (genre === "") err.genre = "Pick a genre";
+    if (artist.trim().length < 2) err.artist = "Artist name is required";
+
+    let bpmNum = Number(bpm);
+    if (bpm === "" || isNaN(bpmNum) || bpmNum < 1 || bpmNum > 100) {
+      err.bpm = "BPM must be between 1 and 100";
+    }
+
+    if (label.trim() === "") err.label = "Record label is required";
+    if (role === "") err.role = "Select a role";
+
+    return err;
   }
 
-  function validate(values) {
-    const next = {};
-
-    if (values.title.trim().length < 3) {
-      next.title = "Title needs at least 3 characters";
-    }
-    if (!values.genre) {
-      next.genre = "Pick a genre";
-    }
-    if (values.artist.trim().length < 2) {
-      next.artist = "Artist name is required";
-    }
-    const bpm = Number(values.bpm);
-    if (values.bpm === "" || Number.isNaN(bpm) || bpm < 1 || bpm > 100) {
-      next.bpm = "BPM must be between 1 and 100";
-    }
-    if (!values.label.trim()) {
-      next.label = "Record label is required";
-    }
-    if (!values.role) {
-      next.role = "Select a role";
-    }
-
-    return next;
-  }
-
-  function handleSubmit(e) {
+  function submit(e) {
     e.preventDefault();
-    const validationErrors = validate(form);
-    setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length > 0) return;
+    const err = checkErrors();
+    setErrors(err);
+
+    if (Object.keys(err).length > 0) {
+      return;
+    }
 
     onAdd({
-      title: form.title.trim(),
-      genre: form.genre,
-      artist: form.artist.trim(),
-      bpm: Number(form.bpm),
-      label: form.label.trim(),
-      role: form.role,
+      title: title.trim(),
+      genre,
+      artist: artist.trim(),
+      bpm: Number(bpm),
+      label: label.trim(),
+      role,
     });
 
-    setForm(EMPTY_FORM);
+    setTitle("");
+    setGenre("");
+    setArtist("");
+    setBpm("");
+    setLabel("");
+    setRole("");
     setErrors({});
   }
 
   return (
-    <form
-      className="flex flex-col gap-3.5 rounded-xl border border-violet-100 bg-white/80 p-5 shadow-sm backdrop-blur-sm"
-      onSubmit={handleSubmit}
-      noValidate
-    >
-      <h2 className="mb-1 text-base font-semibold text-violet-800">
-        Register Track
-      </h2>
+    <form onSubmit={submit} className="rounded-md border border-gray-200 bg-white p-5 flex flex-col gap-3">
+      <h2 className="text-base font-semibold text-gray-800 mb-1">Register Track</h2>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="title" className={labelClass}>Track Title</label>
+      <div>
+        <label className="text-sm text-gray-600">Track Title</label>
         <input
-          id="title"
-          type="text"
-          className={inputClass}
-          value={form.title}
-          onChange={(e) => updateField("title", e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500"
         />
-        {errors.title && <span className={errorClass}>{errors.title}</span>}
+        {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="genre" className={labelClass}>Genre</label>
+      <div>
+        <label className="text-sm text-gray-600">Genre</label>
         <select
-          id="genre"
-          className={inputClass}
-          value={form.genre}
-          onChange={(e) => updateField("genre", e.target.value)}
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500"
         >
           <option value="">Select genre</option>
-          {GENRES.map((g) => (
-            <option key={g} value={g}>{g}</option>
+          {genres.map((g) => (
+            <option value={g} key={g}>{g}</option>
           ))}
         </select>
-        {errors.genre && <span className={errorClass}>{errors.genre}</span>}
+        {errors.genre && <p className="text-xs text-red-600">{errors.genre}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="artist" className={labelClass}>Artist Name</label>
+      <div>
+        <label className="text-sm text-gray-600">Artist Name</label>
         <input
-          id="artist"
-          type="text"
-          className={inputClass}
-          value={form.artist}
-          onChange={(e) => updateField("artist", e.target.value)}
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500"
         />
-        {errors.artist && <span className={errorClass}>{errors.artist}</span>}
+        {errors.artist && <p className="text-xs text-red-600">{errors.artist}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="bpm" className={labelClass}>BPM (1-100)</label>
+      <div>
+        <label className="text-sm text-gray-600">BPM (1-100)</label>
         <input
-          id="bpm"
           type="number"
-          min="1"
-          max="100"
-          className={inputClass}
-          value={form.bpm}
-          onChange={(e) => updateField("bpm", e.target.value)}
+          value={bpm}
+          onChange={(e) => setBpm(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500"
         />
-        {errors.bpm && <span className={errorClass}>{errors.bpm}</span>}
+        {errors.bpm && <p className="text-xs text-red-600">{errors.bpm}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="label" className={labelClass}>Record Label</label>
+      <div>
+        <label className="text-sm text-gray-600">Record Label</label>
         <input
-          id="label"
-          type="text"
-          className={inputClass}
-          value={form.label}
-          onChange={(e) => updateField("label", e.target.value)}
+          value={label}
+          onChange={(e) => setLabel(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500"
         />
-        {errors.label && <span className={errorClass}>{errors.label}</span>}
+        {errors.label && <p className="text-xs text-red-600">{errors.label}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <span className={labelClass}>User Role</span>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-1.5 text-sm">
-            <input
-              type="radio"
-              name="role"
-              value="Creator"
-              checked={form.role === "Creator"}
-              onChange={(e) => updateField("role", e.target.value)}
-            />
+      <div>
+        <label className="text-sm text-gray-600">User Role</label>
+        <div className="flex gap-4 mt-1">
+          <label className="text-sm text-gray-700 flex items-center gap-1">
+            <input type="radio" checked={role === "Creator"} onChange={() => setRole("Creator")} />
             Creator
           </label>
-          <label className="flex items-center gap-1.5 text-sm">
-            <input
-              type="radio"
-              name="role"
-              value="Listener"
-              checked={form.role === "Listener"}
-              onChange={(e) => updateField("role", e.target.value)}
-            />
+          <label className="text-sm text-gray-700 flex items-center gap-1">
+            <input type="radio" checked={role === "Listener"} onChange={() => setRole("Listener")} />
             Listener
           </label>
         </div>
-        {errors.role && <span className={errorClass}>{errors.role}</span>}
+        {errors.role && <p className="text-xs text-red-600">{errors.role}</p>}
       </div>
 
-      <button
-        type="submit"
-        className="mt-1.5 rounded-lg bg-violet-700 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-800"
-      >
+      <button type="submit" className="mt-1 rounded-md bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2.5">
         Add Track
       </button>
     </form>
