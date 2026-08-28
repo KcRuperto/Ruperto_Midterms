@@ -16,14 +16,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-violet-100 to-purple-200">
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-20">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-violet-800">Playlist Manager</h1>
-          <p className="text-sm text-slate-500 mt-1">
+      <header className="sticky top-0 z-10 border-b border-violet-200 bg-white/80 px-6 py-3 backdrop-blur-sm">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-700 to-blue-600 bg-clip-text text-transparent">Track & Spin</h1>
+          <p className="text-xs text-slate-500">
             Register tracks and manage your library
           </p>
-        </header>
+        </div>
+      </header>
 
+      <div className="max-w-5xl mx-auto px-6 pt-8 pb-20">
         <main className="grid grid-cols-1 md:grid-cols-[340px_1fr] gap-6">
           <section className="md:row-span-2">
             <TrackForm onAdd={handleAddTrack} />
